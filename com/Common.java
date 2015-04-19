@@ -44,21 +44,6 @@ public class Common
         {
             System.out.println("NumberFormatException: " + nfe.getMessage());
         }
-
-        return i;
-    }
-
-    static public long stringToLong (String s)
-    {
-        long i = 0;
-        try
-        {
-            i = Long.parseLong(s.trim());
-        }
-        catch (NumberFormatException nfe)
-        {
-            System.out.println("NumberFormatException: " + nfe.getMessage());
-        }
         return i;
     }
 }

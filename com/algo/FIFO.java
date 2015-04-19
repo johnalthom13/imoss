@@ -2,16 +2,16 @@ package com.algo;
 
 import java.util.ArrayList;
 
-import com.Page;
+import com.type.Page;
 import com.ui.ControlPanel;
 
 public class FIFO extends AbstractFaultAlgorithm
 {
 
-	FIFO(ControlPanel controlPanel)
-	{
-		super(controlPanel);
-	}
+    FIFO(ControlPanel controlPanel)
+    {
+        super(controlPanel);
+    }
 
     /**
      * The page replacement algorithm for the memory management sumulator.
@@ -24,10 +24,10 @@ public class FIFO extends AbstractFaultAlgorithm
      * to find the proper page while making sure that virtPageNum is
      * not exceeded.
      * <pre>
-     *   Page page = ( Page ) mem.elementAt( oldestPage )
+     *   Page page = ( Page ) pages.elementAt( oldestPage )
      * </pre>
      * This line brings the contents of the Page at oldestPage (a
-     * specified integer) from the mem vector into the page object.
+     * specified integer) from the pages vector into the page object.
      * Next recall the contents of the target page, replacePageNum.
      * Set the physical memory address of the page to be added equal
      * to the page to be removed.
@@ -41,56 +41,29 @@ public class FIFO extends AbstractFaultAlgorithm
      * function call.  One must also remember to reset the values of
      * the page which has just been removed from memory.
      *
-     * @param mem is the vector which contains the contents of the pages
-     *   in memory being simulated.  mem should be searched to find the
+     * @param pages is the vector which contains the contents of the pages
+     *   in memory being simulated.  pages should be searched to find the
      *   proper page to remove, and modified to reflect any changes.
      * @param virtPageNum is the number of virtual pages in the
      *   simulator (set in Kernel.java).
      * @param replacePageNum is the requested page which caused the
      *   page fault.
      */
-	@Override
-	public void replacePage(ArrayList<Page> mem, int virtPageNum, int replacePageNum)
-	{
-
-        int count = 0;
+    @Override
+    protected int getPageToReplace(ArrayList<Page> pages, long virtualPageNum)
+    {
         int oldestPage = -1;
-        int oldestTime = 0;
-        int firstPage = -1;
-        boolean mapped = false;
+        int oldestTime = -1;
+        for (Page page : pages)
+        {
+            if (page.getPhysicalPage() != -1 && page.getInMemoryTime() > oldestTime)
+            {
+                oldestPage = page.getId();
+                oldestTime = page.getInMemoryTime();
+            }
+        }
 
-        while ( ! (mapped) || count != virtPageNum )
-        {
-            Page page = mem.get( count );
-            if (page.isValidPhysicalAddress())
-            {
-                if (firstPage == -1)
-                {
-                    firstPage = count;
-                }
-                if (page.getInMemoryTime() > oldestTime)
-                {
-                    oldestTime = page.getInMemoryTime();
-                    oldestPage = count;
-                    mapped = true;
-                }
-            }
-            count++;
-            if ( count == virtPageNum )
-            {
-                mapped = true;
-            }
-        }
-        if (oldestPage == -1)
-        {
-            oldestPage = firstPage;
-        }
-        Page page = mem.get( oldestPage );
-        Page nextpage = mem.get( replacePageNum );
-        controlPanel_.removePageAt(oldestPage);
-        nextpage.setPhysicalAddress(page.getPhysicalPage());
-        controlPanel_.addPageAt(nextpage.getPhysicalPage(), replacePageNum);
-        page.set(-1, (byte)0, (byte)0, 0, 0);
-	}
+        return oldestPage;
+    }
 
 }

@@ -3,6 +3,7 @@ package com;
 // The main MemoryManagement program, created by Alexander Reeder, 2000 Nov 19
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JFrame;
 
@@ -10,7 +11,7 @@ import com.ui.ControlPanel;
 
 public class MemoryManagement
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException
     {
         if ( args.length < 1 || args.length > 2 )
         {
@@ -46,7 +47,8 @@ public class MemoryManagement
                 System.exit( -1 );
             }
         }
-        
+
+        DebugStream.activate();
         JFrame x = new JFrame();
         x.add(new ControlPanel(args[0] , args[1]));
         x.pack();

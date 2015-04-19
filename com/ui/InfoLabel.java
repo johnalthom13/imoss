@@ -8,45 +8,45 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class InfoLabel extends JPanel
 {
-	private final static int A_PANEL_HEIGHT = 15;
-	private final static Dimension LABEL_SIZE = new Dimension(150, A_PANEL_HEIGHT);
-	private final static Dimension VALUE_SIZE = new Dimension(200, A_PANEL_HEIGHT);
-	
-	/// Value is assumed zero
-	public InfoLabel(String label)
-	{
-		label_ = new JLabel(label + ":");
-		label_.setPreferredSize(LABEL_SIZE);
-		value_ = new JLabel("0");
-		value_.setPreferredSize(VALUE_SIZE);
-		
-		add(label_);
-		add(value_);
-	}
-	
-	public InfoLabel(String label, String value)
-	{
-		label_ = new JLabel(label + ":");
-		label_.setPreferredSize(LABEL_SIZE);
-		value_ = new JLabel(value);
-		value_.setPreferredSize(VALUE_SIZE);
-		
-		add(label_);
-		add(value_);
-	}
-	
-	public void setValue(int value)
-	{
-		value_.setText("" + value);
-	}
-	
-	public void setValue(String value)
-	{
-		value_.setText(value);
-	}
-	
-	private JLabel label_;
-	private JLabel value_;
+    private final static int A_PANEL_HEIGHT = 15;
+    private final static Dimension LABEL_SIZE = new Dimension(150, A_PANEL_HEIGHT);
+    private final static Dimension VALUE_SIZE = new Dimension(200, A_PANEL_HEIGHT);
+
+    /// Value is assumed zero
+    public InfoLabel(String label)
+    {
+        label_ = new JLabel(label + ":");
+        label_.setPreferredSize(LABEL_SIZE);
+        value_ = new JLabel("0");
+        value_.setPreferredSize(VALUE_SIZE);
+
+        add(label_);
+        add(value_);
+    }
+
+    public InfoLabel(String label, String value)
+    {
+        label_ = new JLabel(label + ":");
+        label_.setPreferredSize(LABEL_SIZE);
+        value_ = new JLabel(value);
+        value_.setPreferredSize(VALUE_SIZE);
+
+        add(label_);
+        add(value_);
+    }
+
+    public void setValue(int value)
+    {
+        value_.setText("" + value);
+    }
+
+    public void setValue(String value)
+    {
+        value_.setText(value);
+    }
+
+    private JLabel label_;
+    private JLabel value_;
 }
 
 
