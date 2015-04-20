@@ -213,7 +213,7 @@ public class Controller extends Thread
             if (!page.isValidPhysicalAddress())
             {
                 System.out.println(instruct + " ... page fault");
-                algorithm_.replacePage( pageMemList_ , virtPageNum_ , Virtual2Physical.pageNum(addr, virtPageNum_ , block_ ));
+                algorithm_.replacePage(pageMemList_, Virtual2Physical.pageNum(addr, virtPageNum_ , block_));
                 controlPanel_.setPageFaultPresent(true);
             }
             else
@@ -231,7 +231,7 @@ public class Controller extends Thread
             if (!page.isValidPhysicalAddress())
             {
                 System.out.println(instruct + " ... page fault" );
-                algorithm_.replacePage( pageMemList_ , virtPageNum_ , Virtual2Physical.pageNum(addr, virtPageNum_ , block_ ));
+                algorithm_.replacePage(pageMemList_, Virtual2Physical.pageNum(addr, virtPageNum_ , block_ ));
                 controlPanel_.setPageFaultPresent(true);
             }
             else

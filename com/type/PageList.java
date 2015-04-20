@@ -14,4 +14,17 @@ public class PageList extends ArrayList<Page>
             set(i, page);
 		}
 	}
+	
+	public PageList getAllFromClass(PageClass pgClass)
+	{
+		PageList temp = new PageList();
+		for (Page page : this)
+		{
+			if (page.getPhysicalPage() != -1 && page.getPageClass() == pgClass)
+			{
+				temp.add(page);
+			}
+		}
+		return temp;
+	}
 }

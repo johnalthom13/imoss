@@ -1,8 +1,7 @@
 package com.algo;
 
-import java.util.ArrayList;
-
 import com.type.Page;
+import com.type.PageList;
 import com.ui.ControlPanel;
 
 public abstract class AbstractFaultAlgorithm
@@ -12,9 +11,9 @@ public abstract class AbstractFaultAlgorithm
         controlPanel_ = controlPanel;
     }
 
-    public void replacePage(ArrayList<Page> mem, long virtPageNum , int replacePageNum)
+    public void replacePage(PageList mem, int replacePageNum)
     {
-        int pageToReplace = getPageToReplace(mem, virtPageNum);
+        int pageToReplace = getPageToReplace(mem);
         Page page = mem.get(pageToReplace);
         Page nextpage = mem.get(replacePageNum);
         controlPanel_.removePageAt(pageToReplace);
@@ -23,6 +22,6 @@ public abstract class AbstractFaultAlgorithm
         page.set(-1, (byte)0, (byte)0, 0, 0);
     }
 
-    protected abstract int getPageToReplace(ArrayList<Page> pages, long virtPageNum);
+    protected abstract int getPageToReplace(PageList pages);
     protected ControlPanel controlPanel_;
 }

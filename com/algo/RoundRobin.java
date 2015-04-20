@@ -1,8 +1,7 @@
 package com.algo;
 
-import java.util.ArrayList;
-
 import com.type.Page;
+import com.type.PageList;
 import com.ui.ControlPanel;
 
 public class RoundRobin extends AbstractFaultAlgorithm
@@ -14,7 +13,7 @@ public class RoundRobin extends AbstractFaultAlgorithm
     }
     
     @Override
-    protected int getPageToReplace(ArrayList<Page> pages, long virtualPageNum)
+    protected int getPageToReplace(PageList pages)
     {
         int pageToReplace = -1;
         for (Page page : pages)
@@ -29,12 +28,16 @@ public class RoundRobin extends AbstractFaultAlgorithm
         return pageToReplace;
     }
 
-    private int getNumberOfPhysicalPages(ArrayList<Page> mem )
+    private int getNumberOfPhysicalPages(PageList mem )
     {
         int count = 0;
         for (Page page : mem)
+        {
             if (page.getPhysicalPage() != -1)
+            {
                 count++;
+            }
+        }
         return count;
     }
     private static int rrNextPage_ = 0;

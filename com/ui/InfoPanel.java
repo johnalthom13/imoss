@@ -17,6 +17,7 @@ public class InfoPanel extends JPanel
     public InfoPanel()
     {
         pageFaultCount_ = 0;
+        pageFaultCost_ = 0;
         initComponents();
         addComponents();
     }
@@ -72,6 +73,7 @@ public class InfoPanel extends JPanel
 
         add(pageFaultPresentLabel_);
         add(pageFaultCountLabel_);
+        add(pageFaultCostLabel_);
         add(new JLabel());
 
         add(virtualPageValueLabel_);
@@ -93,7 +95,8 @@ public class InfoPanel extends JPanel
         addressLabel_ = new InfoLabel("Address", "NULL");
 
         pageFaultPresentLabel_ = new InfoLabel("Page Fault", "NO");
-        pageFaultCountLabel_ = new InfoLabel("Fault Count");
+        pageFaultCountLabel_ = new InfoLabel("Page Fault Count");
+        pageFaultCostLabel_ = new InfoLabel("Page Fault Cost");
 
         virtualPageValueLabel_ = new InfoLabel("Virtual Page", "x");
         physicalPageValueLabel_ = new InfoLabel("Physical Page");
@@ -106,6 +109,7 @@ public class InfoPanel extends JPanel
     }
 
     private int pageFaultCount_;
+    private int pageFaultCost_;
     private InfoLabel addressLabel_;
 
     private InfoLabel highValueLabel_;
@@ -116,11 +120,13 @@ public class InfoPanel extends JPanel
     private InfoLabel lastTouchTimeValueLabel_;
     private InfoLabel lowValueLabel_;
     private InfoLabel mValueLabel_;
+    
     private InfoLabel pageFaultPresentLabel_;
     private InfoLabel pageFaultCountLabel_;
+    private InfoLabel pageFaultCostLabel_;
+    
     private InfoLabel physicalPageValueLabel_;
     private InfoLabel rValueLabel_;
     private InfoLabel timeValueLabel_;
     private InfoLabel virtualPageValueLabel_;
-
 }

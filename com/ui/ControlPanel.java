@@ -27,7 +27,7 @@ public class ControlPanel extends JPanel
         infoPanel_ = new InfoPanel();
         setPagePanel();
         setLayout();
-        kernel_.init(new FaultAlgorithmFactory(this).fetch(FaultAlgo.LRU), commands, config);
+        kernel_.init(new FaultAlgorithmFactory(this).fetch(FaultAlgo.NRU), commands, config);
     }
 
     public void addPage(int pageNum, Page physicalPage)

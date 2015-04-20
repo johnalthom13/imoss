@@ -1,8 +1,7 @@
 package com.algo;
 
-import java.util.ArrayList;
-
 import com.type.Page;
+import com.type.PageList;
 import com.ui.ControlPanel;
 
 public class LRU extends AbstractFaultAlgorithm
@@ -14,7 +13,7 @@ public class LRU extends AbstractFaultAlgorithm
     }
     
     @Override
-    protected int getPageToReplace(ArrayList<Page> pages, long virtualPageNum)
+    protected int getPageToReplace(PageList pages)
     {
         int pageToReplace = -1;
         int usedLongAgo = -1;

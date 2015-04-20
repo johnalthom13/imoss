@@ -1,8 +1,7 @@
 package com.algo;
 
-import java.util.ArrayList;
-
 import com.type.Page;
+import com.type.PageList;
 import com.ui.ControlPanel;
 
 public class FIFO extends AbstractFaultAlgorithm
@@ -50,7 +49,7 @@ public class FIFO extends AbstractFaultAlgorithm
      *   page fault.
      */
     @Override
-    protected int getPageToReplace(ArrayList<Page> pages, long virtualPageNum)
+    protected int getPageToReplace(PageList pages)
     {
         int oldestPage = -1;
         int oldestTime = -1;

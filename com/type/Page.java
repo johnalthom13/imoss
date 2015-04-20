@@ -133,6 +133,11 @@ public class Page
     	return "Page " + id_;
     }
 
+    public PageClass getPageClass()
+    {
+    	return PageClass.compute(R_, M_);
+    }
+    
     // TODO FIX ME
     public int lastTouchTime_;
     public byte M_;

@@ -4,7 +4,9 @@ public enum FaultAlgo
 {
     FIFO("FIFO"),
     ROUND_ROBIN("Round Robin"),
-    LRU("LRU");
+    RANDOM("Random"),
+    LRU("LRU"),
+    NRU("NRU");
 
     private FaultAlgo(String name)
     {
