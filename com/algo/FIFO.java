@@ -2,15 +2,9 @@ package com.algo;
 
 import com.type.Page;
 import com.type.PageList;
-import com.ui.ControlPanel;
 
 public class FIFO extends AbstractFaultAlgorithm
 {
-
-    FIFO(ControlPanel controlPanel)
-    {
-        super(controlPanel);
-    }
 
     /**
      * The page replacement algorithm for the memory management sumulator.
@@ -64,5 +58,11 @@ public class FIFO extends AbstractFaultAlgorithm
 
         return oldestPage;
     }
+
+	@Override
+	public String toString()
+	{
+		return "FIFO";
+	}
 
 }

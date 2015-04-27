@@ -1,16 +1,18 @@
 package com;
 
+import com.data.ConfigData;
+
 public class Virtual2Physical
 {
-    public static int pageNum (long memaddr, long virtPageNum_, long block)
+    public static int getPageNumberFromAddress(long memaddr)
     {
         int i = 0;
         long high = 0;
         long low = 0;
-        for (i = 0; i <= virtPageNum_; ++i)
+        for (i = 0; i <= ConfigData.VIRTUAL_PAGE_COUNT; ++i)
         {
-            low = block*i;
-            high = block*(i + 1);
+            low = ConfigData.BLOCK_SIZE*i;
+            high = ConfigData.BLOCK_SIZE*(i + 1);
             if (low <= memaddr && memaddr < high)
             {
                 return i;

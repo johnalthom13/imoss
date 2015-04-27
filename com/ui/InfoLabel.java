@@ -40,6 +40,11 @@ public class InfoLabel extends JPanel
         value_.setText("" + value);
     }
 
+    public void setValue(boolean value)
+    {
+        value_.setText(value ? "TRUE" : "FALSE");
+    }
+
     public void setValue(String value)
     {
         value_.setText(value);

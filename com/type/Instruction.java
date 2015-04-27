@@ -22,7 +22,7 @@ public class Instruction
 
     public String getInstructionCode()
     {
-        // TODO Fix me
+        // TODO Should return enum type
         return instructionCode_.name();
     }
 

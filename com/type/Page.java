@@ -4,23 +4,18 @@ import com.data.Constants;
 
 public class Page
 {
-    public Page( int id, int physical, byte R, byte M, int inMemTime, int lastTouchTime, long high, long low )
+    public Page(int id, int physical, int inMemTime, int lastTouchTime, long high, long low)
     {
         id_ = id;
-        set(physical, R, M, inMemTime, lastTouchTime);
+        set(physical, false, false, inMemTime, lastTouchTime);
         setBounds(high, low);
     }
 
-    public Page(int virtualPageNum, int physicalPageNum, byte readFrom, byte modified, int inMemTime, int lastTouchTime)
+    public Page(int virtualPageNum, int physicalPageNum, boolean isReferenced, boolean isModified, int inMemTime, int lastTouchTime)
     {
         id_ = virtualPageNum;
-        set(physicalPageNum, readFrom, modified, inMemTime, lastTouchTime);
+        set(physicalPageNum, isReferenced, isModified, inMemTime, lastTouchTime);
         setBounds(-1, -1);
-    }
-
-    public void addInMemoryTime(int timeAddition)
-    {
-        inMemTime_ += timeAddition;
     }
 
     public String getHighAddress()
@@ -58,11 +53,11 @@ public class Page
         return (physical_ != -1);
     }
 
-    public void set(int physical, byte r, byte m, int inMemTime, int lastTouchTime)
+    public void set(int physical, boolean isReferenced, boolean isModified, int inMemTime, int lastTouchTime)
     {
         physical_ = physical;
-        R_ = r;
-        M_ = m;
+        isReferenced_ = isReferenced;
+        isModified_ = isModified;
         inMemTime_ = inMemTime;
         lastTouchTime_ = lastTouchTime;
     }
@@ -106,16 +101,6 @@ public class Page
             System.err.println("Configuration Problem: Invalid page value " + "\nReason(s): " + reason);
             System.exit(-1);
         }
-        if (R_ < 0 || R_ > 1)
-        {
-            System.err.println("MemoryManagement: Invalid R value");
-            System.exit(-1);
-        }
-        if (M_ < 0 || M_ > 1)
-        {
-            System.err.println("MemoryManagement: Invalid M value");
-            System.exit(-1);
-        }
         if (inMemTime_ < 0)
         {
             System.err.println("MemoryManagement: Invalid inMemTime");
@@ -135,17 +120,58 @@ public class Page
 
     public PageClass getPageClass()
     {
-    	return PageClass.compute(R_, M_);
+    	return PageClass.compute(isReferenced_, isModified_);
     }
     
-    // TODO FIX ME
-    public int lastTouchTime_;
-    public byte M_;
-    public byte R_;
+    // TODO Make members private. Rename R_ to replaced, M_ to modified. Make both boolean.
+    private int lastTouchTime_;
+    private boolean isModified_;
+    private boolean isReferenced_;
 
     private long addressHigh_;
     private long addressLow_;
     private int id_;
     private int inMemTime_;
     private int physical_;
+    
+	public void setAsReferenced()
+	{
+		lastTouchTime_ = 0;
+		isReferenced_ = true;
+	}
+
+	public void setAsModified()
+	{
+		lastTouchTime_ = 0;
+		isModified_ = true;
+	}
+
+	public void refreshTimers()
+	{
+		final int TIME_UNIT = 10; // 10 nanoseconds
+        if (isReferenced_  && lastTouchTime_ == TIME_UNIT)
+        {
+            isReferenced_ = false;
+        }
+        if (isValidPhysicalAddress())
+        {
+            inMemTime_ += TIME_UNIT;
+            lastTouchTime_ = lastTouchTime_ + TIME_UNIT;
+        }
+	}
+
+	public int getLastTouchTime()
+	{
+		return lastTouchTime_;
+	}
+
+	public boolean isReferenced()
+	{
+		return isReferenced_;
+	}
+
+	public boolean isModified()
+	{
+		return isModified_;
+	}
 }

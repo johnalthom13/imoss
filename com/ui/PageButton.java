@@ -15,7 +15,8 @@ public class PageButton extends JPanel
     public PageButton(int id)
     {
         pageId_ = id;
-        pageButton_ = new JButton(" Page " + pageId_);
+        pageButton_ = new JButton(" VP " + pageId_);
+        pageButton_.setName("" + pageId_);
         pageButton_.setForeground( Color.magenta );
         pageButton_.setBackground( Color.lightGray );
         pageLabel_ = new JLabel();

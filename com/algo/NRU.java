@@ -3,16 +3,9 @@ package com.algo;
 import com.type.Page;
 import com.type.PageClass;
 import com.type.PageList;
-import com.ui.ControlPanel;
 
 public class NRU extends AbstractFaultAlgorithm
 {
-
-    NRU(ControlPanel controlPanel)
-    {
-        super(controlPanel);
-    }
-    
     @Override
     protected int getPageToReplace(PageList pages)
     {
@@ -34,4 +27,10 @@ public class NRU extends AbstractFaultAlgorithm
     	}
     	return pageId;
     }
+
+	@Override
+	public String toString()
+	{
+		return "NRU";
+	}
 }

@@ -5,11 +5,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.Controller;
-import com.algo.FaultAlgo;
-import com.algo.FaultAlgorithmFactory;
 import com.data.Constants;
 import com.type.Instruction;
 import com.type.Page;
@@ -17,32 +16,45 @@ import com.type.Page;
 public class ControlPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
-
-    public ControlPanel(String commands, String config)
+    
+    public ControlPanel()
     {
-        kernel_ = new Controller();
-        kernel_.setControlPanel(this);
-
-        commandPanel_ = new CommandPanel(kernel_);
+        commandPanel_ = new CommandPanel();
         infoPanel_ = new InfoPanel();
         setPagePanel();
         setLayout();
-        kernel_.init(new FaultAlgorithmFactory(this).fetch(FaultAlgo.NRU), commands, config);
     }
 
+    public void setController(final Controller controller)
+    {
+    	commandPanel_.setController(controller);
+    	addListenerToButtons(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				JButton evtSrc = (JButton) event.getSource();
+				int id = Integer.parseInt(evtSrc.getName());
+				if (id < Constants.MAX_PAGE_COUNT)
+					controller.getPage(id);
+			}
+		});
+    }
+    
     public void addPage(int pageNum, Page physicalPage)
     {
-        pageButtons_[physicalPage.getPhysicalPage()].setText("page " + pageNum);
+    	addPageAt(pageNum, physicalPage.getPhysicalPage());
     }
 
     public void addPageAt(int pageNum, int physicalPage)
     {
+    	initializePageButtons();
         pageButtons_[physicalPage].setText("page " + pageNum);
     }
 
     public void removePage(Page physicalPage)
     {
-        pageButtons_[physicalPage.getPhysicalPage()].setText("");
+    	removePageAt(physicalPage.getPhysicalPage());
     }
 
     public void removePageAt(int loc)
@@ -52,7 +64,10 @@ public class ControlPanel extends JPanel
 
     public void reset()
     {
-        infoPanel_ = new InfoPanel();
+    	removeAll();
+    	infoPanel_ = new InfoPanel();
+        setPagePanel();
+        setLayout();
     }
 
     public void reset(Page page)
@@ -82,32 +97,46 @@ public class ControlPanel extends JPanel
         add(commandPanel_, BorderLayout.NORTH);
         add(pagePanel_, BorderLayout.WEST);
         add(infoPanel_, BorderLayout.EAST);
-    }
 
+        repaint();
+        revalidate();
+    }
+    
+    private void initializePageButtons()
+    {
+        if (pageButtons_ == null)
+        {
+            pageButtons_ = new PageButton[(int) Constants.MAX_PAGE_COUNT];
+        }
+    }
+    
     private void setPagePanel()
     {
         GridLayout layout = new GridLayout(0, Constants.COLUMN_VIEW, 0, 0);
         pagePanel_ = new JPanel(layout);
-        pageButtons_ = new PageButton[Constants.MAX_PAGE_COUNT];
+        initializePageButtons();
         for (int i = 0; i < Constants.MAX_PAGE_COUNT; ++i)
         {
             final int id = i;
             pageButtons_[id] = new PageButton(id);
-            pageButtons_[id].addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent arg0)
-                {
-                    kernel_.getPage(id);
-                }
-            });
-
+            pageButtons_[id].repaint();
+            pageButtons_[id].revalidate();
             pagePanel_.add(pageButtons_[id]);
+            
+        }
+    }
+    
+    private void addListenerToButtons(ActionListener listener)
+    {
+        for (int i = 0; i < Constants.MAX_PAGE_COUNT; ++i)
+        {
+            final int id = i;
+            pageButtons_[id].addActionListener(listener);
         }
     }
 
     private CommandPanel commandPanel_;
     private InfoPanel infoPanel_;
-    private Controller kernel_;
     private PageButton[] pageButtons_;
     private JPanel pagePanel_;
 

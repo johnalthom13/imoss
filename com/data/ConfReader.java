@@ -9,20 +9,18 @@ import com.Common;
 import com.type.Page;
 import com.type.PageList;
 
+@Deprecated
 public class ConfReader
 {
+	public static String FILENAME = "";
     private ConfReader(String configFile)
     {
         configFile_ = new File(configFile);
     }
 
-    public static ConfReader create(String configFile)
+    public static ConfReader create()
     {
-        if (configFile == null)
-        {
-            configFile = "memory.conf";
-        }
-        instance_ = new ConfReader(configFile);
+        instance_ = new ConfReader(FILENAME);
         return instance_;
     }
 
@@ -59,7 +57,6 @@ public class ConfReader
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
@@ -101,8 +98,8 @@ public class ConfReader
                         physicalPageNum = Common.stringToInt(tokens[2]);
                     }
 
-                    byte readFrom = Common.stringToByte(tokens[3]);
-                    byte modified = Common.stringToByte(tokens[4]);
+                    boolean readFrom = Common.stringToBoolean(tokens[3]);
+                    boolean modified = Common.stringToBoolean(tokens[4]);
                     int inMemTime = Common.stringToInt(tokens[5]);
                     int lastTouchTime = Common.stringToInt(tokens[5]);
 
@@ -117,7 +114,6 @@ public class ConfReader
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

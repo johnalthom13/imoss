@@ -27,4 +27,14 @@ public class PageList extends ArrayList<Page>
 		}
 		return temp;
 	}
+
+	public void refreshTimers()
+	{
+		for (int i = 0; i < size(); ++i)
+		{
+			Page page = get(i);
+            page.refreshTimers();
+            set(i, page);
+		}
+	}
 }

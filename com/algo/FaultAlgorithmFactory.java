@@ -1,33 +1,24 @@
 package com.algo;
 
-import com.ui.ControlPanel;
 
 public class FaultAlgorithmFactory
 {
-
-    public FaultAlgorithmFactory(ControlPanel controlPanel)
-    {
-        controlPanel_ = controlPanel;
-    }
-
     public AbstractFaultAlgorithm fetch(FaultAlgo algo)
     {
         switch (algo)
         {
         case FIFO :
-            return new FIFO(controlPanel_);
+            return new FIFO();
         case ROUND_ROBIN :
-            return new RoundRobin(controlPanel_);
+            return new RoundRobin();
         case RANDOM :
-            return new Random(controlPanel_);
+            return new Random();
         case LRU :
-            return new LRU(controlPanel_);
+            return new LRU();
         case NRU :
-            return new NRU(controlPanel_);
+            return new NRU();
         default:
             return null;
         }
     }
-
-    private ControlPanel controlPanel_;
 }

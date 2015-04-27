@@ -2,15 +2,9 @@ package com.algo;
 
 import com.type.Page;
 import com.type.PageList;
-import com.ui.ControlPanel;
 
 public class RoundRobin extends AbstractFaultAlgorithm
 {
-
-    RoundRobin(ControlPanel controlPanel)
-    {
-        super(controlPanel);
-    }
     
     @Override
     protected int getPageToReplace(PageList pages)
@@ -28,6 +22,12 @@ public class RoundRobin extends AbstractFaultAlgorithm
         return pageToReplace;
     }
 
+	@Override
+	public String toString()
+	{
+		return "Round Robin";
+	}
+	
     private int getNumberOfPhysicalPages(PageList mem )
     {
         int count = 0;

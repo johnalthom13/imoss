@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import com.type.Instruction;
 import com.type.Page;
@@ -27,10 +27,10 @@ public class InfoPanel extends JPanel
         virtualPageValueLabel_.setValue(page.getId());
         physicalPageValueLabel_.setValue(page.getPhysicalPage());
 
-        rValueLabel_.setValue(page.R_);
-        mValueLabel_.setValue(page.M_);
+        rValueLabel_.setValue(page.isReferenced());
+        mValueLabel_.setValue(page.isModified());
         inMemTimeLabel_.setValue(page.getInMemoryTime());
-        lastTouchTimeValueLabel_.setValue(page.lastTouchTime_);
+        lastTouchTimeValueLabel_.setValue(page.getLastTouchTime());
         lowValueLabel_.setValue(page.getHighAddress());
         highValueLabel_.setValue(page.getHighAddress());
     }
@@ -47,7 +47,9 @@ public class InfoPanel extends JPanel
         if (isPresent)
         {
             pageFaultCount_++;
+            pageFaultCost_++; // TODO Fix for dirty page
             pageFaultCountLabel_.setValue(pageFaultCount_);
+            pageFaultCostLabel_.setValue(pageFaultCost_);
         }
     }
 
@@ -65,16 +67,16 @@ public class InfoPanel extends JPanel
     private void addComponents()
     {
         add(timeValueLabel_);
-        add(new JLabel());
+        add(new JSeparator());
 
         add(instructionLabel_);
         add(addressLabel_);
-        add(new JLabel());
+        add(new JSeparator());
 
         add(pageFaultPresentLabel_);
         add(pageFaultCountLabel_);
         add(pageFaultCostLabel_);
-        add(new JLabel());
+        add(new JSeparator());
 
         add(virtualPageValueLabel_);
         add(physicalPageValueLabel_);

@@ -2,15 +2,9 @@ package com.algo;
 
 import com.type.Page;
 import com.type.PageList;
-import com.ui.ControlPanel;
 
 public class LRU extends AbstractFaultAlgorithm
 {
-
-    LRU(ControlPanel controlPanel)
-    {
-        super(controlPanel);
-    }
     
     @Override
     protected int getPageToReplace(PageList pages)
@@ -19,13 +13,19 @@ public class LRU extends AbstractFaultAlgorithm
         int usedLongAgo = -1;
         for (Page page : pages)
         {
-            if (page.lastTouchTime_ > usedLongAgo)
+            if (page.getLastTouchTime() > usedLongAgo)
             {
-                usedLongAgo = page.lastTouchTime_;
+                usedLongAgo = page.getLastTouchTime();
                 pageToReplace = page.getId();
             }
         }
         return pageToReplace;
     }
+    
+	@Override
+	public String toString()
+	{
+		return "LRU";
+	}
 
 }

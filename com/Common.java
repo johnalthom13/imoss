@@ -46,5 +46,10 @@ public class Common
         }
         return i;
     }
+
+	public static boolean stringToBoolean(String string)
+	{
+		return stringToByte(string) == 1;
+	}
 }
 
