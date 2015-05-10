@@ -115,7 +115,7 @@ public class Page
     
     public String toString()
     {
-    	return "Page " + id_;
+    	return "Page " + id_ + " RO = " + isReadOnly_;
     }
 
     public PageClass getPageClass()
@@ -134,6 +134,8 @@ public class Page
     private int inMemTime_;
     private int physical_;
     
+    private boolean isReadOnly_ = false;
+    
 	public void setAsReferenced()
 	{
 		lastTouchTime_ = 0;
@@ -149,10 +151,6 @@ public class Page
 	public void refreshTimers()
 	{
 		final int TIME_UNIT = 10; // 10 nanoseconds
-        if (isReferenced_  && lastTouchTime_ == TIME_UNIT)
-        {
-            isReferenced_ = false;
-        }
         if (isValidPhysicalAddress())
         {
             inMemTime_ += TIME_UNIT;
@@ -173,5 +171,15 @@ public class Page
 	public boolean isModified()
 	{
 		return isModified_;
+	}
+	
+	public void setAsReadOnly()
+	{
+		isReadOnly_ = true;
+	}
+	
+	public boolean isReadOnly()
+	{
+		return isReadOnly_;
 	}
 }

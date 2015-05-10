@@ -35,9 +35,25 @@ public class InfoLabel extends JPanel
         add(value_);
     }
 
-    public void setValue(int value)
+    public InfoLabel()
     {
-        value_.setText("" + value);
+        label_ = new JLabel("");
+        label_.setPreferredSize(LABEL_SIZE);
+        value_ = new JLabel("");
+        value_.setPreferredSize(VALUE_SIZE);
+
+        add(label_);
+        add(value_);
+	}
+
+	public void setValue(int value)
+    {
+		String text = "" + value;
+		if (isAddress_)
+		{
+	        text = "0x" + text;
+		}
+        value_.setText(text);
     }
 
     public void setValue(boolean value)
@@ -47,11 +63,26 @@ public class InfoLabel extends JPanel
 
     public void setValue(String value)
     {
+		if (isAddress_ && value.indexOf("0x") < 0)
+		{
+			value = "0x" + value;
+		}
         value_.setText(value);
+    }
+    
+    public String getValue()
+    {
+    	return label_.getText();
+    }
+    
+    public void setAsAddress()
+    {
+    	isAddress_ = true;
     }
 
     private JLabel label_;
     private JLabel value_;
+    private boolean isAddress_;
 }
 
 

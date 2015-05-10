@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import com.algo.AbstractFaultAlgorithm;
+import com.algo.FIFO;
 import com.data.ConfigData;
 import com.data.Constants;
 import com.type.Instruction;
@@ -33,6 +34,7 @@ public class Controller extends Thread implements PropertyChangeListener
 		controlPanelRef_ = controlPanel;
         runs_ = 0;
         pageMemList_ = new PageList();
+        instructionList_ = new ArrayList<>();
         instructionList_ = (ArrayList<Instruction>) ConfigData.INSTRUCTIONS_LIST.clone();
         populatePageList();
         init();
@@ -40,18 +42,24 @@ public class Controller extends Thread implements PropertyChangeListener
 	
     private void populatePageList()
     {
-        for (int i = 0; i <= ConfigData.VIRTUAL_PAGE_COUNT; i++)
+        for (int pageId = 0; pageId <= ConfigData.VIRTUAL_PAGE_COUNT; pageId++)
         {
-            long high = (ConfigData.BLOCK_SIZE * (i + 1))-1;
-            long low = ConfigData.BLOCK_SIZE * i;
-            pageMemList_.add(new Page(i, -1, 0, 0, high, low));
+            long high = (ConfigData.BLOCK_SIZE * (pageId + 1))-1;
+            long low = ConfigData.BLOCK_SIZE * pageId;
+            Page newPage = new Page(pageId, -1, 0, 0, high, low);
+            if (ConfigData.LOWER_RO_PAGE <= pageId && pageId <= ConfigData.UPPER_RO_PAGE)
+            {
+            	newPage.setAsReadOnly();
+            }
+            pageMemList_.add(newPage);
         }
 	}
 
-	public void getPage(int pageNum)
+	public Page getPage(int pageNum)
     {
         Page page = pageMemList_.get(pageNum);
         controlPanelRef_.reset(page);
+        return page;
     }
         
     private void init()
@@ -135,51 +143,49 @@ public class Controller extends Thread implements PropertyChangeListener
     		JOptionPane.showMessageDialog(null, "ERROR");
     		return;
     	}
+    	
         Instruction instruct = instructionList_.get(runs_);
         long addr = instruct.getAddress();
         controlPanelRef_.setInstruction(instruct);
-        getPage(Virtual2Physical.getPageNumberFromAddress(instruct.getAddress()));
-        controlPanelRef_.setPageFaultPresent(false);
-        if (instruct.isRead())
-        {
-            int pageId = Virtual2Physical.getPageNumberFromAddress(instruct.getAddress());
-            Page page = pageMemList_.get(pageId);
-            if (!page.isValidPhysicalAddress())
-            {
-                System.out.println(instruct + " ... page fault");
-                algorithm_.replacePage(controlPanelRef_, pageMemList_, Virtual2Physical.getPageNumberFromAddress(addr));
-                controlPanelRef_.setPageFaultPresent(true);
-            }
-            else
-            {
-                page.setAsReferenced();
-                System.out.println(instruct + " ... okay");
-            }
-            pageMemList_.set(pageId, page);
-        }
-        if (instruct.isWrite())
-        {
-            int pageId = Virtual2Physical.getPageNumberFromAddress(addr);
-            Page page = pageMemList_.get(pageId);
-            if (!page.isValidPhysicalAddress())
-            {
-                System.out.println(instruct + " ... page fault" );
-                algorithm_.replacePage(controlPanelRef_, pageMemList_, Virtual2Physical.getPageNumberFromAddress(addr));
-                controlPanelRef_.setPageFaultPresent(true);
-            }
-            else
-            {
-                page.setAsModified();
-                System.out.println(instruct + " ... okay");
-            }
-            pageMemList_.set(pageId, page);
-        }
-        
+        int pageId = Virtual2Physical.getPageNumberFromAddress(addr);
+		Page page = getPage(pageId);
+    	controlPanelRef_.setReadOnlyViolationOccurred(instruct.isWrite() && page.isReadOnly());
+        swapPage(instruct, page);
         pageMemList_.refreshTimers();
         runs_++;
         // TODO Fix magic number
         controlPanelRef_.setTime(runs_*10);
     }
+
+	private void swapPage(Instruction instruct, Page page)
+	{
+        controlPanelRef_.setPageFaultPresent(false);
+    	controlPanelRef_.setAsDirtyPage(false);
+        
+        if (!page.isValidPhysicalAddress())
+        {
+            System.out.println(instruct + " ... page fault");
+            if (instruct.isWrite())
+            {
+            	controlPanelRef_.setAsDirtyPage(true);
+            }
+            algorithm_.replacePage(controlPanelRef_, pageMemList_, page.getId());
+            controlPanelRef_.setPageFaultPresent(true);
+        }
+        else
+        {
+        	if (instruct.isRead())
+        	{
+                page.setAsReferenced();
+        	}
+        	else if (instruct.isWrite())
+        	{
+                page.setAsModified();
+        	}
+
+            System.out.println(instruct + " ... okay");
+        }
+	}
 
 	private void setAlgorithm(AbstractFaultAlgorithm algo)
 	{
@@ -205,7 +211,7 @@ public class Controller extends Thread implements PropertyChangeListener
 	}
 	
 	private ControlPanel controlPanelRef_;
-    private AbstractFaultAlgorithm algorithm_;
+    private AbstractFaultAlgorithm algorithm_ = new FIFO();
     private ArrayList<Instruction> instructionList_;
     private PageList pageMemList_;
 

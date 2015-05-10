@@ -3,10 +3,10 @@ package com.algo;
 public enum FaultAlgo
 {
     FIFO("FIFO"),
-    ROUND_ROBIN("Round Robin"),
     RANDOM("Random"),
     LRU("LRU"),
-    NRU("NRU");
+    NRU("NRU"),
+    ROUND_ROBIN("Round Robin");
 
     private FaultAlgo(String name)
     {

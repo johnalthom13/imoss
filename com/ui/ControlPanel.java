@@ -36,7 +36,9 @@ public class ControlPanel extends JPanel
 				JButton evtSrc = (JButton) event.getSource();
 				int id = Integer.parseInt(evtSrc.getName());
 				if (id < Constants.MAX_PAGE_COUNT)
+				{
 					controller.getPage(id);
+				}
 			}
 		});
     }
@@ -126,6 +128,11 @@ public class ControlPanel extends JPanel
         }
     }
     
+    public void setReadOnlyViolationOccurred(boolean violationOccurred)
+    {
+    	infoPanel_.setReadOnlyViolationOccurred(violationOccurred);
+    }
+    
     private void addListenerToButtons(ActionListener listener)
     {
         for (int i = 0; i < Constants.MAX_PAGE_COUNT; ++i)
@@ -134,10 +141,16 @@ public class ControlPanel extends JPanel
             pageButtons_[id].addActionListener(listener);
         }
     }
+    
+	public void setAsDirtyPage(boolean isDirty)
+	{
+		infoPanel_.setAsDirtyPage(isDirty);
+	}
 
     private CommandPanel commandPanel_;
     private InfoPanel infoPanel_;
     private PageButton[] pageButtons_;
     private JPanel pagePanel_;
+
 
 }

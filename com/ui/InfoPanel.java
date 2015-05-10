@@ -5,7 +5,6 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 
 import com.type.Instruction;
 import com.type.Page;
@@ -18,6 +17,7 @@ public class InfoPanel extends JPanel
     {
         pageFaultCount_ = 0;
         pageFaultCost_ = 0;
+        setMinimumSize(getPreferredSize());
         initComponents();
         addComponents();
     }
@@ -47,18 +47,23 @@ public class InfoPanel extends JPanel
         if (isPresent)
         {
             pageFaultCount_++;
-            pageFaultCost_++; // TODO Fix for dirty page
+            pageFaultCost_++;
             pageFaultCountLabel_.setValue(pageFaultCount_);
             pageFaultCostLabel_.setValue(pageFaultCost_);
         }
     }
 
+    public void setReadOnlyViolationOccurred(boolean violationOccurred)
+    {
+    	readOnlyRangeViolationLabel_.setValue(violationOccurred);
+    }
+    
     @Override
     public Dimension getPreferredSize()
     {
         return new Dimension(400, 100);
     }
-
+    
     public void setTime(int time)
     {
         timeValueLabel_.setValue(time + " (ns)");
@@ -67,16 +72,20 @@ public class InfoPanel extends JPanel
     private void addComponents()
     {
         add(timeValueLabel_);
-        add(new JSeparator());
+        add(new InfoLabel());
 
         add(instructionLabel_);
         add(addressLabel_);
-        add(new JSeparator());
+        add(new InfoLabel());
+        
+        add(readOnlyRangeViolationLabel_);
+        add(new InfoLabel());
 
         add(pageFaultPresentLabel_);
         add(pageFaultCountLabel_);
         add(pageFaultCostLabel_);
-        add(new JSeparator());
+        add(dirtyPageLabel_);
+        add(new InfoLabel());
 
         add(virtualPageValueLabel_);
         add(physicalPageValueLabel_);
@@ -92,13 +101,17 @@ public class InfoPanel extends JPanel
     private void initComponents()
     {
         timeValueLabel_ = new InfoLabel("Time");
+        
+        readOnlyRangeViolationLabel_ = new InfoLabel("R/O Range Violation", "");
 
         instructionLabel_ = new InfoLabel("Instruction", "NONE");
         addressLabel_ = new InfoLabel("Address", "NULL");
+        addressLabel_.setAsAddress();
 
         pageFaultPresentLabel_ = new InfoLabel("Page Fault", "NO");
         pageFaultCountLabel_ = new InfoLabel("Page Fault Count");
         pageFaultCostLabel_ = new InfoLabel("Page Fault Cost");
+        dirtyPageLabel_ = new InfoLabel("Is Page Dirty?");
 
         virtualPageValueLabel_ = new InfoLabel("Virtual Page", "x");
         physicalPageValueLabel_ = new InfoLabel("Physical Page");
@@ -107,17 +120,32 @@ public class InfoPanel extends JPanel
         inMemTimeLabel_ = new InfoLabel("In-Memory Time");
         lastTouchTimeValueLabel_ = new InfoLabel("Last Touch Time");
         lowValueLabel_ = new InfoLabel("Low Value");
+        lowValueLabel_.setAsAddress();
         highValueLabel_ = new InfoLabel("High Value");
+        highValueLabel_.setAsAddress();
     }
+    
+
+	public void setAsDirtyPage(boolean isDirty)
+	{
+    	if (isDirty)
+    	{
+            pageFaultCost_++;
+            pageFaultCostLabel_.setValue(pageFaultCost_);
+    	}
+		dirtyPageLabel_.setValue(isDirty);
+	}
 
     private int pageFaultCount_;
     private int pageFaultCost_;
+    
     private InfoLabel addressLabel_;
 
     private InfoLabel highValueLabel_;
     private InfoLabel inMemTimeLabel_;
 
     private InfoLabel instructionLabel_;
+    private InfoLabel readOnlyRangeViolationLabel_;
 
     private InfoLabel lastTouchTimeValueLabel_;
     private InfoLabel lowValueLabel_;
@@ -126,9 +154,11 @@ public class InfoPanel extends JPanel
     private InfoLabel pageFaultPresentLabel_;
     private InfoLabel pageFaultCountLabel_;
     private InfoLabel pageFaultCostLabel_;
+    private InfoLabel dirtyPageLabel_;
     
     private InfoLabel physicalPageValueLabel_;
     private InfoLabel rValueLabel_;
     private InfoLabel timeValueLabel_;
     private InfoLabel virtualPageValueLabel_;
+
 }

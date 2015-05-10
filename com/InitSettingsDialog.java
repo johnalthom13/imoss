@@ -13,8 +13,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import com.algo.FIFO;
 import com.data.CommandReader;
 import com.data.ConfigData;
 import com.data.Constants;
@@ -33,6 +33,7 @@ public class InitSettingsDialog extends JDialog
 		setLayout(new GridLayout(0, 1));
 		add(createPageSizeSelectionPanel());
 		add(createPageCountSelectionPanel());
+		add(createReadOnlyBoundsPanel());
 		prepareSubmitButton();
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -77,6 +78,23 @@ public class InitSettingsDialog extends JDialog
 		return panel;
 	}
 	
+	private JPanel createReadOnlyBoundsPanel()
+	{
+		JPanel panel = new JPanel(new BorderLayout());
+
+		lowerReadOnlyPage_ = new JTextField("0");
+		upperReadOnlyPage_ = new JTextField("10");
+		JPanel textboxPanel = new JPanel(new GridLayout(1, 0));
+		textboxPanel.add(lowerReadOnlyPage_);
+		textboxPanel.add(new JLabel("to"));
+		textboxPanel.add(upperReadOnlyPage_);
+		
+		JLabel label = new JLabel("Read-only page(s): ");
+		panel.add(textboxPanel, BorderLayout.EAST);
+		panel.add(label, BorderLayout.WEST);
+		return panel;
+	}
+	
 	private void prepareSubmitButton()
 	{
 		submitButton_ = new JButton("Submit");
@@ -87,6 +105,13 @@ public class InitSettingsDialog extends JDialog
 			{
 				ConfigData.BLOCK_SIZE = (int) pageSizeSelector_.getSelectedItem();
 				ConfigData.VIRTUAL_PAGE_COUNT = (int) pageCountSelector_.getSelectedItem();
+				
+				int lower = Integer.parseInt(lowerReadOnlyPage_.getText());				
+				int upper = Integer.parseInt(upperReadOnlyPage_.getText());
+
+				ConfigData.UPPER_RO_PAGE = Math.max(upper, lower);
+				ConfigData.LOWER_RO_PAGE = Math.min(upper, lower);
+				
 				dispose();
 				int addressLimit = (ConfigData.BLOCK_SIZE * ConfigData.VIRTUAL_PAGE_COUNT+1)-1;
 				ConfigData.INSTRUCTIONS_LIST = CommandReader.readCommands(addressLimit);
@@ -106,7 +131,9 @@ public class InitSettingsDialog extends JDialog
 		});
 		add(submitButton_);
 	}
-	
+
+	private JTextField lowerReadOnlyPage_;
+	private JTextField upperReadOnlyPage_;
 	private JComboBox<Integer> pageSizeSelector_;
 	private JComboBox<Integer> pageCountSelector_;
 	private JButton submitButton_;

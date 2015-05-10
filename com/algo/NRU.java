@@ -15,6 +15,7 @@ public class NRU extends AbstractFaultAlgorithm
     		selectedPages = pages.getAllFromClass(pgClass);
     		if (!selectedPages.isEmpty())
     		{
+    			System.err.println(pgClass);
     			break;
     		}
     	}
