@@ -126,7 +126,7 @@ public class Controller extends Thread implements PropertyChangeListener
         {
             try
             {
-                Thread.sleep(Constants.ANIMATION_DELAY);
+                Thread.sleep(ConfigData.ANIMATION_DELAY);
             }
             catch(InterruptedException e)
             {

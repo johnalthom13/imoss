@@ -20,7 +20,6 @@ public class CommandPanel extends JPanel
 
     public CommandPanel()
     {
-    	algoFactory_ = new FaultAlgorithmFactory();
         setLayout(new GridLayout(1, 0));
         initRunButton();
         initStepButton();
@@ -38,7 +37,7 @@ public class CommandPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
             	listener_.propertyChange(new PropertyChangeEvent(this, Constants.ALGORITHM_PROPERTY, null, 
-            			algoFactory_.fetch((FaultAlgo) faultAlgoSelect_.getSelectedItem()) ));
+            			FaultAlgorithmFactory.fetch((FaultAlgo) faultAlgoSelect_.getSelectedItem()) ));
             }
         });
         add(faultAlgoSelect_);
@@ -118,7 +117,6 @@ public class CommandPanel extends JPanel
     	listener_ = controller;
     }
     
-    private FaultAlgorithmFactory algoFactory_;
     private JComboBox<FaultAlgo> faultAlgoSelect_;
     private Controller listener_;
     private CommandButton exitButton_;

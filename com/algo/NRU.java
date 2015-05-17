@@ -1,14 +1,24 @@
 package com.algo;
 
+import com.data.Constants;
 import com.type.Page;
 import com.type.PageClass;
 import com.type.PageList;
 
 public class NRU extends AbstractFaultAlgorithm
-{
+{	
     @Override
     protected int getPageToReplace(PageList pages)
     {
+    	if (totalRuns_%Constants.PERIODIC_CLEAR_COUNT == 0)
+    	{
+    		pages.clearRefereceBits();
+    	}
+    	if (totalRuns_ == pages.size())
+    	{
+    		totalRuns_ = 0;
+    	}
+    	
     	PageList selectedPages = new PageList();
     	for (PageClass pgClass : PageClass.values())
     	{
@@ -19,19 +29,21 @@ public class NRU extends AbstractFaultAlgorithm
     			break;
     		}
     	}
-    	int pageId = (int) (Math.random()*selectedPages.size());
-    	Page page = pages.get(pageId);
-    	while (page.getPhysicalPage() == -1)
-    	{
-        	pageId = (int) (Math.random()*selectedPages.size());
-        	page = pages.get(pageId);
-    	}
-    	return pageId;
+    	
+    	int index = (int) (Math.random()*selectedPages.size());
+    	Page toBeReplaced = selectedPages.get(index);
+    	
+    	totalRuns_++;
+    	return toBeReplaced.getId();
     }
+    
 
 	@Override
 	public String toString()
 	{
-		return "NRU";
+		return FaultAlgo.NRU.toString();
 	}
+	
+	private static int totalRuns_ = 1;
+	
 }

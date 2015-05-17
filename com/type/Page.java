@@ -61,6 +61,17 @@ public class Page
         inMemTime_ = inMemTime;
         lastTouchTime_ = lastTouchTime;
     }
+    
+    public void reset()
+    {
+    	set(-1, false, false, 0, 0);
+    }
+    
+    public void resetTimers()
+    {
+    	inMemTime_ = 0;
+    	lastTouchTime_ = 0;
+    }
 
     public void setBounds(long high, long low)
     {
@@ -120,10 +131,9 @@ public class Page
 
     public PageClass getPageClass()
     {
-    	return PageClass.compute(isReferenced_, isModified_);
+    	return PageClass.compute(isReferenced(), isModified());
     }
     
-    // TODO Make members private. Rename R_ to replaced, M_ to modified. Make both boolean.
     private int lastTouchTime_;
     private boolean isModified_;
     private boolean isReferenced_;
@@ -141,6 +151,11 @@ public class Page
 		lastTouchTime_ = 0;
 		isReferenced_ = true;
 	}
+	
+	public void clearReferencedBit()
+	{
+		isReferenced_ = false;
+	}
 
 	public void setAsModified()
 	{
@@ -151,6 +166,10 @@ public class Page
 	public void refreshTimers()
 	{
 		final int TIME_UNIT = 10; // 10 nanoseconds
+        if (isReferenced_ && lastTouchTime_ == TIME_UNIT) 
+        {
+        	isReferenced_ = false;
+        }
         if (isValidPhysicalAddress())
         {
             inMemTime_ += TIME_UNIT;

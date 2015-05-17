@@ -62,7 +62,7 @@ public class FIFO extends AbstractFaultAlgorithm
 	@Override
 	public String toString()
 	{
-		return "FIFO";
+		return FaultAlgo.FIFO.toString();
 	}
 
 }

@@ -14,7 +14,7 @@ public abstract class AbstractFaultAlgorithm
         controlPanel.removePageAt(pageToReplace);
         nextpage.setPhysicalAddress(page.getPhysicalPage());
         controlPanel.addPageAt(nextpage.getPhysicalPage(), replacePageNum);
-        page.set(-1, false, false, 0, 0);
+        page.reset();
     }
     
     public abstract String toString();

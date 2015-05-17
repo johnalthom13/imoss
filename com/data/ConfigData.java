@@ -11,4 +11,7 @@ public class ConfigData
 	public static int VIRTUAL_PAGE_COUNT = 0;
 	public static int LOWER_RO_PAGE;
 	public static int UPPER_RO_PAGE;
+	public static boolean INTERACTIVE_MODE = false;
+
+    public static long ANIMATION_DELAY = 0;
 }

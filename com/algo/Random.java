@@ -21,6 +21,6 @@ public class Random extends AbstractFaultAlgorithm
 	@Override
 	public String toString()
 	{
-		return "Random";
+		return FaultAlgo.RANDOM.toString();
 	}
 }

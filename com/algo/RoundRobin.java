@@ -25,15 +25,15 @@ public class RoundRobin extends AbstractFaultAlgorithm
 	@Override
 	public String toString()
 	{
-		return "Round Robin";
+		return FaultAlgo.ROUND_ROBIN.toString();
 	}
 	
-    private int getNumberOfPhysicalPages(PageList mem )
+    private int getNumberOfPhysicalPages(PageList mem)
     {
         int count = 0;
         for (Page page : mem)
         {
-            if (page.getPhysicalPage() != -1)
+            if (page.isValidPhysicalAddress())
             {
                 count++;
             }

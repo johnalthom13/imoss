@@ -3,7 +3,7 @@ package com.algo;
 
 public class FaultAlgorithmFactory
 {
-    public AbstractFaultAlgorithm fetch(FaultAlgo algo)
+    public static AbstractFaultAlgorithm fetch(FaultAlgo algo)
     {
         switch (algo)
         {
@@ -17,8 +17,16 @@ public class FaultAlgorithmFactory
             return new LRU();
         case NRU :
             return new NRU();
-        default:
-            return null;
+        case SECOND_CHANCE :
+            return new SecondChance();
+        case UNNAMED_ALGO1:
+        	return new UnnamedAlgo1();
+		case MRU:
+			return new MRU();
+		case SECTIONAL:
+			return new SectionalSelect();
+		default:
+			return null;
         }
     }
 }

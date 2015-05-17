@@ -20,7 +20,7 @@ public class PageList extends ArrayList<Page>
 		PageList temp = new PageList();
 		for (Page page : this)
 		{
-			if (page.getPhysicalPage() != -1 && page.getPageClass() == pgClass)
+			if (page.isValidPhysicalAddress() && page.getPageClass() == pgClass)
 			{
 				temp.add(page);
 			}
@@ -34,6 +34,16 @@ public class PageList extends ArrayList<Page>
 		{
 			Page page = get(i);
             page.refreshTimers();
+            set(i, page);
+		}
+	}
+	
+	public void clearRefereceBits()
+	{
+		for (int i = 0; i < size(); ++i)
+		{
+			Page page = get(i);
+            page.clearReferencedBit();
             set(i, page);
 		}
 	}

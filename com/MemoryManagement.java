@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.data.CommandReader;
+import com.ui.InitSettingsDialog;
 
 public class MemoryManagement
 {

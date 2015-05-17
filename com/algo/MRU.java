@@ -3,20 +3,22 @@ package com.algo;
 import com.type.Page;
 import com.type.PageList;
 
-public class LRU extends AbstractFaultAlgorithm
+// TODO Fix this
+public class MRU extends AbstractFaultAlgorithm
 {
     
     @Override
     protected int getPageToReplace(PageList pages)
     {
-        int pageToReplace = -1;
-        int usedLongAgo = -1;
+        int pageToReplace = 0;
+        int minTime = 0;
         for (Page page : pages)
         {
-            if (page.getLastTouchTime() > usedLongAgo)
+        	if (!page.isValidPhysicalAddress()) continue;
+            if (page.getInMemoryTime() < minTime)
             {
-                usedLongAgo = page.getLastTouchTime();
                 pageToReplace = page.getId();
+                minTime = page.getInMemoryTime();
             }
         }
         return pageToReplace;
@@ -25,7 +27,7 @@ public class LRU extends AbstractFaultAlgorithm
 	@Override
 	public String toString()
 	{
-		return FaultAlgo.LRU.toString();
+		return FaultAlgo.MRU.toString();
 	}
 
 }
