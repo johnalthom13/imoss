@@ -161,16 +161,14 @@ public class Controller extends Thread implements PropertyChangeListener
 	{
         controlPanelRef_.setPageFaultPresent(false);
     	controlPanelRef_.setAsDirtyPage(false);
-        
+	
         if (!page.isValidPhysicalAddress())
         {
             System.out.println(instruct + " ... page fault");
-            if (instruct.isWrite())
-            {
-            	controlPanelRef_.setAsDirtyPage(true);
-            }
-            algorithm_.replacePage(controlPanelRef_, pageMemList_, page.getId());
+            Page oldPage = algorithm_.replacePage(controlPanelRef_, pageMemList_, page);
             controlPanelRef_.setPageFaultPresent(true);
+        	controlPanelRef_.setAsDirtyPage(oldPage.isModified());
+            oldPage.reset();
         }
         else
         {
@@ -182,7 +180,6 @@ public class Controller extends Thread implements PropertyChangeListener
         	{
                 page.setAsModified();
         	}
-
             System.out.println(instruct + " ... okay");
         }
 	}
@@ -190,6 +187,7 @@ public class Controller extends Thread implements PropertyChangeListener
 	private void setAlgorithm(AbstractFaultAlgorithm algo)
 	{
 		algorithm_ = algo;
+		algorithm_.setInstructionList(instructionList_);
 	}
 
 	@Override
@@ -214,7 +212,5 @@ public class Controller extends Thread implements PropertyChangeListener
     private AbstractFaultAlgorithm algorithm_ = new FIFO();
     private ArrayList<Instruction> instructionList_;
     private PageList pageMemList_;
-
     private int runs_;
-
 }

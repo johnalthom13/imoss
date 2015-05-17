@@ -21,10 +21,10 @@ public class FaultAlgorithmFactory
             return new SecondChance();
         case UNNAMED_ALGO1:
         	return new UnnamedAlgo1();
-		case MRU:
-			return new MRU();
 		case SECTIONAL:
 			return new SectionalSelect();
+		case OPT:
+			return new Optimal();
 		default:
 			return null;
         }

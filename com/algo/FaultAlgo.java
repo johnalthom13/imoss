@@ -6,6 +6,7 @@ public enum FaultAlgo
     LRU("Least Recently Used"),
     MRU("Most Recently Used"),
     NRU("Not Recently Used"),
+    OPT("Optimal"),
     RANDOM("Random"),
     ROUND_ROBIN("Round Robin"),
     SECOND_CHANCE("Second Chance"),
